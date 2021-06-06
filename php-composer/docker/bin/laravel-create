@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Get User Input and validate
+read -p "Laravel Project Name:" project
+if [ -z "$project" ]
+then
+	echo "Laravel Project Name cannot be blank!"
+	exit 0
+fi
+
+composer create-project laravel/laravel $project
+
+clear
+echo "
+===================== Creation Complete ===================
+
+    Composer Laravel Created successfully!
+    Build something amazing!
+
+==========================================================="
