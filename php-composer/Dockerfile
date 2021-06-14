@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 
-# FROM php:7.1-apache
+FROM php:7.1-apache
 # FROM php:7.2-apache
 # FROM php:7.3-apache
 # FROM php:7.4-apache
-FROM php:8.0-apache
+# FROM php:8.0-apache
 
 # Install System Dependencies
 RUN apt-get update \
@@ -41,10 +41,10 @@ RUN apt-get update \
 
 # Install Magento Dependencies
 # php7.4 and above
-RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
+# RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
 
 # php7.3 and below
-# RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
 
 RUN docker-php-ext-install \
 	bcmath \
@@ -78,7 +78,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 RUN	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 # Downgrade to Composer 1
-# RUN composer self-update --1
+RUN composer self-update --1
 
 # Install Mailhog
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install golang-go \
@@ -94,14 +94,13 @@ RUN wget https://files.magerun.net/n98-magerun2.phar \
 # Configuring system
 ADD docker/config/php.ini /usr/local/etc/php/php.ini
 COPY docker/bin/* /usr/local/bin/
-COPY docker/users/* /var/www/
 RUN chmod +x /usr/local/bin/*
 
-# Install Bash Completion
-RUN curl -o /etc/bash_completion.d/m2install-bash-completion https://raw.githubusercontent.com/yvoronoy/m2install/master/m2install-bash-completion
-RUN curl -o /etc/bash_completion.d/n98-magerun2.phar.bash https://raw.githubusercontent.com/netz98/n98-magerun2/master/res/autocompletion/bash/n98-magerun2.phar.bash
-RUN echo "source /etc/bash_completion" >> /root/.bashrc
-RUN echo "source /etc/bash_completion" >> /var/www/.bashrc
+# Link Bash Completion
+COPY docker/users/.bashrc /usr/local/.bashrc
+RUN echo "source /usr/local/.bashrc" >> /root/.bashrc
+RUN echo "source /usr/local/.bashrc" >> /var/www/.bashrc
+RUN echo "source /usr/local/.bashrc" >> ~/.bashrc
 
 RUN chmod 777 -Rf /var/www /var/www/.* \
 	&& chown -Rf www-data:www-data /var/www /var/www/.* \

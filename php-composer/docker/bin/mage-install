@@ -125,15 +125,16 @@ fi
 
 php -f ./bin/magento setup:upgrade
 php -f ./bin/magento setup:di:compile
-php -f ./bin/magento setup:static-content:deploy
+php -f ./bin/magento setup:static-content:deploy -f
 php -f ./bin/magento indexer:set-mode schedule
 php -f ./bin/magento indexer:reindex
 php -f ./bin/magento deploy:mode:set $mode
 php -f ./bin/magento cache:flush
 
-# Install npm and grunt
+# Install npm, grun and cron
 mv package.json.sample package.json
 mv Gruntfile.js.sample Gruntfile.js
+n98 cron:install
 npm i
 
 # Finish Installation
