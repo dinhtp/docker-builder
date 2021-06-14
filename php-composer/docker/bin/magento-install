@@ -117,9 +117,6 @@ echo $cmd
 
 eval $cmd
 
-# Install N98 Cron and Copy Composer Auth 
-n98 cron:install
-
 # Execute Dependency Command
 if [[ $useSample = "y" ]]; 
 then 
@@ -141,7 +138,7 @@ npm i
 
 # Finish Installation
 composer dump-autoload -o
-clear
+chmod -R 777 var/ pub/ generated/
 echo "
 ===================== Installation Complete ===================
 

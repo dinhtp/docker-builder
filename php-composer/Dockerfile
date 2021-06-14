@@ -55,6 +55,7 @@ RUN docker-php-ext-install \
 	xsl \
 	zip \
 	sockets \
+	mcrypt \
 	opcache
 
 # Install oAuth
